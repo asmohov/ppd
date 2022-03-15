@@ -1,0 +1,15 @@
+
+#PBS -j oe                         
+#PBS -l select=2:ncpus=40:mpiprocs=40:model=sky_ele
+#PBS -l walltime=01:00:00           
+#PBS -N std_res_long_adv           
+#PBS -q normal                
+
+
+echo ----------------------------------------
+echo Job started on `date`
+echo ----------------------------------------
+
+mpiexec -n 64 $ATHENA -i athinput_64.hgb       # run code
+
+# -end of script-
