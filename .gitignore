@@ -1,0 +1,2 @@
+#ignore file type of athena data dumps
+*.vtk
