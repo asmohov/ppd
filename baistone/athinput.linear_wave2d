@@ -16,7 +16,7 @@ variable   = prim      # variables to be output
 dt         = 0.01      # time increment between outputs
 
 <time>
-cfl_number  = 0.4       # The Courant, Friedrichs, & Lewy (CFL) Number
+cfl_number  = 0.5       # The Courant, Friedrichs, & Lewy (CFL) Number
 nlim        = -1        # cycle limit
 tlim        = 50.0       # time limit
 integrator  = vl2       # time integration algorithm
@@ -39,6 +39,8 @@ ox2_bc     = periodic  # outer-X2 boundary flag
 nx3        = 1         # Number of zones in X3-direction
 x3min      = -0.5      # minimum value of X3
 x3max      = 0.5       # maximum value of X3
+ix3_bc     = periodic  # inner-X2 boundary flag
+ox3_bc     = periodic  # outer-X2 boundary flag
 
 num_threads = 1        # maximum number of OMP threads
 
@@ -48,8 +50,10 @@ iso_sound_speed = 1.0     # isothermal sound speed
 
 <problem>
 compute_error = false # set value to 'true' to compute L1 error compared to initial data
-wave_flag = 4         # Wave family number (0 - 6 for adiabatic MHD)
-amp       = 1.0e-6    # Wave Amplitude
+wave_flag = 6         # Wave family number (0 - 6 for adiabatic MHD)
+amp       = 1.0e-4    # Wave Amplitude
 vflow     = 0.0       # background flow velocity
-ang_2     = 0.463647609       # rotation of k around x3 axis, set to the diagonal angle of the box
+ang_2     = 0         # rotation of k around x3 axis, set to the diagonal angle of the box                     
 ang_3_vert= false     # set to 'true' to make ang_3=pi/2
+
+eta_ad    = .0324
