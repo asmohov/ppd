@@ -1,0 +1,17 @@
+
+
+#PBS -j oe
+#PBS -l select=2:ncpus=40:mpiprocs=40:model=sky_ele
+#PBS -l walltime=08:00:00
+#PBS -N hgb_ad_nosts
+#PBS -q normal
+
+
+echo ----------------------------------------
+echo Job started on `date`
+echo ----------------------------------------
+
+mpiexec -n 64 /nobackup/amohov/hgb_ad_nosts/athena -i athinput.hgb       # run code
+
+# -end of script- 
+# -end of script-
