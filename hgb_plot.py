@@ -20,8 +20,8 @@ def init_hgb():
 
     fig, ax=plt.subplots(2,2, sharex=False, sharey = False, constrained_layout=True)
 
-    fig.set_figheight(16)
-    fig.set_figwidth(16)
+    fig.set_figheight(10)
+    fig.set_figwidth(10)
     print('Figure initialised!')
     return fig,ax
 

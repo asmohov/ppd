@@ -1,8 +1,8 @@
 
 
 #PBS -j oe
-#PBS -l select=2:ncpus=40:mpiprocs=40:model=sky_ele
-#PBS -l walltime=30:00:00
+#PBS -l select=4:ncpus=40:mpiprocs=40:model=sky_ele
+#PBS -l walltime=72:00:00
 #PBS -N hgb_ad_long
 #PBS -q long
 
@@ -11,7 +11,7 @@ echo ----------------------------------------
 echo Job started on `date`
 echo ----------------------------------------
 
-mpiexec -n 64 /nobackup/amohov/hgb_ad_long/athena -i athinput.hgb       # run code
+mpiexec -n 128 /nobackup/amohov/hgb_ad_long/athena -i athinput.hgb -t 71:45:00      # run code
 
 # -end of script- 
 # -end of script-
