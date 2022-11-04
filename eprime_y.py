@@ -6,10 +6,11 @@ sys.path.append('~/working')
 
 import numpy as np
 import matplotlib.pyplot as plt
-
+import matplotlib as mpl
 #IMPORT APPROPRIATE ATHINPUT FILE
 #import athinput.hgb as athin
 import athena_read
+
 
 
 
@@ -308,3 +309,98 @@ def az_avg(file_name,data_name):
     #ax.plot(data['x1v'],eprime_zyavg,label = labl)
     #plt.show()
     return(data_zyavg)
+
+#creates .npz file with calculated az_avg arrays for density and vy
+def az_avg_rho_vy(file_path,output_name,max_orbits = 101):
+
+    #adjust image quality
+    arr=range(20,max_orbits)
+    radial_coords = athena_read.athdf(file_path+'/HGB.out2.00044.athdf')['x1v']
+    contour_list = []
+    radial_dim = len(athena_read.athdf(file_path+'/HGB.out2.00044.athdf')['x1v'])
+    print('orbit number should be ',arr)
+    for i in arr:
+        if i<100:
+            contour_list.append(az_avg(file_path+'/HGB.out2.000'+str(i)+'.athdf','rho'))
+        else:
+            contour_list.append(az_avg(file_path+'/HGB.out2.00'+str(i)+'.athdf','rho'))
+        if i%25 == 0:
+            print('passing step ',i)
+
+
+    radial_dim = len(athena_read.athdf(file_path+'/HGB.out2.00044.athdf')['x1v'])
+    contour_list= np.vstack(contour_list)
+    print(np.shape(contour_list))
+    az_avg_rho = np.transpose(contour_list)
+
+    #vy-vshear, 8x8 AM = 1
+    print('rho calculation done')
+
+    arr=range(20,max_orbits)
+    contour_list = []
+
+    for i in arr:
+        if i<100:
+            contour_list.append(az_avg(file_path+'/HGB.out2.000'+str(i)+'.athdf','vel2'))
+        else:
+            contour_list.append(az_avg(file_path+'/HGB.out2.00'+str(i)+'.athdf','vel2'))
+        if i%25 == 0:
+            print('passing step ',i)
+
+    radial_dim = len(athena_read.athdf(file_path+'/HGB.out2.00044.athdf')['x1v'])
+    contour_list= np.vstack(contour_list)
+    print(np.shape(contour_list))
+    az_avg_vy = np.transpose(contour_list)
+
+    np.savez(output_name,az_avg_vy=az_avg_vy,az_avg_rho = az_avg_rho)
+    print('finished calculating az_avg for ',output_name)
+    
+def az_avg_plotter(npz_name):
+    #for vy-vshear
+    fig, ax=plt.subplots(sharex=False, sharey = False, constrained_layout=True)
+
+    fig.set_figheight(5)
+    fig.set_figwidth(10)
+    ax.set_xlabel('orbit number')
+    ax.set_ylabel('radial coordinate x')
+    title = 'Azimuthal Average Vy - Vshear for '+npz_name 
+    fig.suptitle(title)
+    #load dataset
+    npzfile = np.load(npz_name)
+    data = npzfile['az_avg_vy']
+
+    #axes values
+    num_rows,num_col = np.shape(data)
+    arr=range(20,20+num_col)
+    #hard code for 4x4 box
+    #radial_coords = athena_read.athdf('./ad_prof/const_am/HGB.out2.00044.athdf')['x1v']
+    
+    #hard coded for 8x8 box
+    radial_coords = athena_read.athdf('./ad_prof/const_am_big/1point0/HGB.out2.00044.athdf')['x1v']
+
+    plt.pcolormesh(arr,radial_coords,data,shading = 'gouraud',cmap = 'RdBu_r')
+    plt.colorbar()
+    plt.show()
+
+    #same but for rho
+    fig, ax=plt.subplots(sharex=False, sharey = False, constrained_layout=True)
+
+    fig.set_figheight(5)
+    fig.set_figwidth(10)
+    ax.set_xlabel('orbit number')
+    ax.set_ylabel('radial coordinate x')
+    title = 'Azimuthal Average Rho for '+npz_name 
+    fig.suptitle(title)
+    #load dataset
+    npzfile = np.load(npz_name)
+    data = npzfile['az_avg_rho']
+
+    #axes values
+    print(data.shape)
+    num_rows,num_col = np.shape(data)
+    arr=range(20,20+num_col)
+
+
+    plt.pcolormesh(arr,radial_coords,data,norm=mpl.colors.CenteredNorm(vcenter =1),shading = 'gouraud',cmap = 'RdBu_r')
+    plt.colorbar()
+    plt.show()

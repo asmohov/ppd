@@ -3,7 +3,7 @@
 #PBS -j oe
 #PBS -l select=13:ncpus=40:mpiprocs=40:model=sky_ele
 #PBS -l walltime=72:00:00
-#PBS -N const_am_big
+#PBS -N am_10_sig_const
 #PBS -q long
 
 
