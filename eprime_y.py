@@ -256,8 +256,8 @@ def v_over_time_plot(file_name,fig,ax):
 
 def az_avg(file_name,data_name):
     data = athena_read.athdf(file_name)
-    #for 4x4x1 scale height box, with cubic cells, needs to be adjusted for other sizes
-    side_length = 8/len(data['x1v'])
+    #for 8x8x1 scale height box, with cubic cells, needs to be adjusted for other sizes
+    side_length = 1/len(data['x3v'])
     #print(side_length,' side length')
     volume = side_length**3
     #print(volume,' volume')
@@ -265,62 +265,38 @@ def az_avg(file_name,data_name):
     #constants
     omega0 = 1.0
     qshear = 1.5
-
+    Nx = len(data['x1v'])
+    Ny = len(data['x2v'])
+    Nz = len(data['x3v'])
     
-    #arrays for plotting to visualize v_shear
-    vy_arr = []
-    x_arr = []
-    v_shear = []
-    counter = 0
     #assuming 64x256x256, but should work for any 
-    overall_length = len(data['x1v'])*len(data['x2v'])*len(data['x3v'])
+    overall_length = Nx*Ny*Nz
     data_arr = []
-    for k in range(len(data['x3v'])):
-        #iterate over z, store current z
-        z = data['x3v'][k]
-        
-
-        for j in range(len(data['x2v'])):
-            #iterate over y, store current y
-            y = data['x2v'][j]
-
-            for i in range(len(data['x1v'])):
-                #iterate over x, retrieve x value from x1v array
-                x = data['x1v'][i]
-                
-                #retrieve indexed density, y velocity
-                #rho = data['rho'][k][j][i]
-                #vy = data['vel2'][k][j][i]
-                #calculate cell centered eprime for chosen cell
-                vsh = -qshear*omega0*x
-                val = data[data_name][k][j][i]
-                #take off vshear if doing azimuthal velocity
-                if data_name == 'vel2':
-                    val = val-vsh
-                data_arr.append(val)
-                counter+=1
-    labl = file_name[file_name.find('00'):]
-    #calculate and plot zy average
-    data_arr = np.array(data_arr)
-    data_arr = np.reshape(data_arr,((len(data['x2v'])*len(data['x3v'])),len(data['x1v'])))
-    data_zyavg = []
-    for i in range(len(data['x1v'])):
-        data_zyavg.append(np.average(data_arr[:,i]))
-    #ax.plot(data['x1v'],eprime_zyavg,label = labl)
-    #plt.show()
-    return(data_zyavg)
+    #array of vshear possible values
+    vsh = -qshear*omega0*data['x1v']
+    vsh_3d = np.broadcast_to(vsh,(Nz,Ny,Nx))
+    data_arr = data[data_name]
+    if data_name == 'vel2':
+        data_arr = data_arr-vsh_3d
+    data_arr = np.sum(data_arr,axis=(0,1))
+    radial_dim = data['x1f'][-1]-data['x1f'][0]
+    div_vol = radial_dim*side_length
+    #divide by number of cells in azimuthal slice
+    data_arr = data_arr/(Ny*Nz)
+    return(data_arr)
 
 #creates .npz file with calculated az_avg arrays for density and vy
-def az_avg_rho_vy(file_path,output_name,max_orbits = 101):
-
-    #adjust image quality
-    arr=range(20,max_orbits)
-    radial_coords = athena_read.athdf(file_path+'/HGB.out2.00044.athdf')['x1v']
+def az_avg_rho_vy(file_path,output_name,min_orbits = 20,max_orbits = 10):
+    arr=range(min_orbits,max_orbits+1)
+    radial_coords = athena_read.athdf(file_path+'/HGB.out2.00002.athdf')['x1v']
     contour_list = []
-    radial_dim = len(athena_read.athdf(file_path+'/HGB.out2.00044.athdf')['x1v'])
+    radial_dim = len(athena_read.athdf(file_path+'/HGB.out2.00002.athdf')['x1v'])
     print('orbit number should be ',arr)
     for i in arr:
-        if i<100:
+        #print(file_path+'/HGB.out2.000'+str(i)+'.athdf')
+        if i<10:
+            contour_list.append(az_avg(file_path+'/HGB.out2.0000'+str(i)+'.athdf','rho'))
+        elif 9<i<100:
             contour_list.append(az_avg(file_path+'/HGB.out2.000'+str(i)+'.athdf','rho'))
         else:
             contour_list.append(az_avg(file_path+'/HGB.out2.00'+str(i)+'.athdf','rho'))
@@ -328,7 +304,7 @@ def az_avg_rho_vy(file_path,output_name,max_orbits = 101):
             print('passing step ',i)
 
 
-    radial_dim = len(athena_read.athdf(file_path+'/HGB.out2.00044.athdf')['x1v'])
+    radial_dim = len(athena_read.athdf(file_path+'/HGB.out2.00002.athdf')['x1v'])
     contour_list= np.vstack(contour_list)
     print(np.shape(contour_list))
     az_avg_rho = np.transpose(contour_list)
@@ -336,18 +312,19 @@ def az_avg_rho_vy(file_path,output_name,max_orbits = 101):
     #vy-vshear, 8x8 AM = 1
     print('rho calculation done')
 
-    arr=range(20,max_orbits)
     contour_list = []
 
     for i in arr:
-        if i<100:
+        if i<10:
+            contour_list.append(az_avg(file_path+'/HGB.out2.0000'+str(i)+'.athdf','vel2'))
+        elif 9<i<100:
             contour_list.append(az_avg(file_path+'/HGB.out2.000'+str(i)+'.athdf','vel2'))
         else:
             contour_list.append(az_avg(file_path+'/HGB.out2.00'+str(i)+'.athdf','vel2'))
         if i%25 == 0:
             print('passing step ',i)
 
-    radial_dim = len(athena_read.athdf(file_path+'/HGB.out2.00044.athdf')['x1v'])
+    radial_dim = len(athena_read.athdf(file_path+'/HGB.out2.00002.athdf')['x1v'])
     contour_list= np.vstack(contour_list)
     print(np.shape(contour_list))
     az_avg_vy = np.transpose(contour_list)
@@ -371,14 +348,21 @@ def az_avg_plotter(npz_name):
 
     #axes values
     num_rows,num_col = np.shape(data)
-    arr=range(20,20+num_col)
+
+    #for normal runs
+    #arr=range(20,20+num_col)
+    #for devel runs
+    arr = range(0,num_col)
+    
+    
+    
     #hard code for 4x4 box
-    #radial_coords = athena_read.athdf('./ad_prof/const_am/HGB.out2.00044.athdf')['x1v']
+    #radial_coords = athena_read.athdf('./ad_prof/const_am/HGB.out2.00002.athdf')['x1v']
     
     #hard coded for 8x8 box
     radial_coords = athena_read.athdf('./ad_prof/const_am_big/1point0/HGB.out2.00044.athdf')['x1v']
 
-    plt.pcolormesh(arr,radial_coords,data,shading = 'gouraud',cmap = 'RdBu_r')
+    plt.pcolormesh(arr,radial_coords,data,norm=mpl.colors.CenteredNorm(vcenter =0),shading = 'gouraud',cmap = 'plasma')
     plt.colorbar()
     plt.show()
 
@@ -398,9 +382,10 @@ def az_avg_plotter(npz_name):
     #axes values
     print(data.shape)
     num_rows,num_col = np.shape(data)
-    arr=range(20,20+num_col)
 
-
-    plt.pcolormesh(arr,radial_coords,data,norm=mpl.colors.CenteredNorm(vcenter =1),shading = 'gouraud',cmap = 'RdBu_r')
+    
+    #scaling statement, if desired
+    #norm=mpl.colors.CenteredNorm(vcenter =1),
+    plt.pcolormesh(arr,radial_coords,data,norm=mpl.colors.CenteredNorm(vcenter =1),shading = 'gouraud',cmap = 'plasma')
     plt.colorbar()
     plt.show()
