@@ -255,6 +255,7 @@ def v_over_time_plot(file_name,fig,ax):
 #AZIMUTHAL AVERAGE OVER RADIAL COORDINATE (AVERAGED IN YZ PLANE FOR INDICIAL X)
 
 def az_avg(file_name,data_name):
+    #print('current file is :'+file_name)
     data = athena_read.athdf(file_name)
     #for 8x8x1 scale height box, with cubic cells, needs to be adjusted for other sizes
     side_length = 1/len(data['x3v'])
@@ -286,12 +287,12 @@ def az_avg(file_name,data_name):
     return(data_arr)
 
 #creates .npz file with calculated az_avg arrays for density and vy
-def az_avg_rho_vy(file_path,output_name,min_orbits = 20,max_orbits = 10):
+def az_avg_rho_vy(file_path,output_name,min_orbits = 20,max_orbits = 100):
     arr=range(min_orbits,max_orbits+1)
     radial_coords = athena_read.athdf(file_path+'/HGB.out2.00002.athdf')['x1v']
     contour_list = []
     radial_dim = len(athena_read.athdf(file_path+'/HGB.out2.00002.athdf')['x1v'])
-    print('orbit number should be ',arr)
+    print('orbits selected: ',arr)
     for i in arr:
         #print(file_path+'/HGB.out2.000'+str(i)+'.athdf')
         if i<10:
@@ -320,6 +321,11 @@ def az_avg_rho_vy(file_path,output_name,min_orbits = 20,max_orbits = 10):
         elif 9<i<100:
             contour_list.append(az_avg(file_path+'/HGB.out2.000'+str(i)+'.athdf','vel2'))
         else:
+            #print('current file at 100 orbit is :')
+            #print(file_path+'/HGB.out2.00'+str(i)+'.athdf')
+            #val = az_avg(file_path+'/HGB.out2.00'+str(i)+'.athdf','vel2')
+            #print('current az_avg list at 100 orbit is :')
+            #print(val)                         
             contour_list.append(az_avg(file_path+'/HGB.out2.00'+str(i)+'.athdf','vel2'))
         if i%25 == 0:
             print('passing step ',i)
@@ -328,7 +334,9 @@ def az_avg_rho_vy(file_path,output_name,min_orbits = 20,max_orbits = 10):
     contour_list= np.vstack(contour_list)
     print(np.shape(contour_list))
     az_avg_vy = np.transpose(contour_list)
-
+    #print('az avg vy at calculation and saving step is:')
+    #print(az_avg_vy)
+    
     np.savez(output_name,az_avg_vy=az_avg_vy,az_avg_rho = az_avg_rho)
     print('finished calculating az_avg for ',output_name)
     
@@ -345,7 +353,8 @@ def az_avg_plotter(npz_name):
     #load dataset
     npzfile = np.load(npz_name)
     data = npzfile['az_avg_vy']
-
+    
+    
     #axes values
     num_rows,num_col = np.shape(data)
 
@@ -357,12 +366,12 @@ def az_avg_plotter(npz_name):
     
     
     #hard code for 4x4 box
-    #radial_coords = athena_read.athdf('./ad_prof/const_am/HGB.out2.00002.athdf')['x1v']
+    radial_coords = athena_read.athdf('./ad_prof/const_am/hundred/HGB.out2.00002.athdf')['x1v']
     
     #hard coded for 8x8 box
-    radial_coords = athena_read.athdf('./ad_prof/const_am_big/1point0/HGB.out2.00044.athdf')['x1v']
+    #radial_coords = athena_read.athdf('./ad_prof/const_am_big/1point0/HGB.out2.00044.athdf')['x1v']
 
-    plt.pcolormesh(arr,radial_coords,data,norm=mpl.colors.CenteredNorm(vcenter =0),shading = 'gouraud',cmap = 'plasma')
+    plt.pcolormesh(arr,radial_coords,data,norm=mpl.colors.CenteredNorm(vcenter =0),shading = 'gouraud',cmap = 'RdBu_r')
     plt.colorbar()
     plt.show()
 
@@ -376,16 +385,14 @@ def az_avg_plotter(npz_name):
     title = 'Azimuthal Average Rho for '+npz_name 
     fig.suptitle(title)
     #load dataset
-    npzfile = np.load(npz_name)
-    data = npzfile['az_avg_rho']
 
     #axes values
     print(data.shape)
     num_rows,num_col = np.shape(data)
-
-    
+    data = npzfile['az_avg_rho']
+    npzfile.close()
     #scaling statement, if desired
     #norm=mpl.colors.CenteredNorm(vcenter =1),
-    plt.pcolormesh(arr,radial_coords,data,norm=mpl.colors.CenteredNorm(vcenter =1),shading = 'gouraud',cmap = 'plasma')
+    plt.pcolormesh(arr,radial_coords,data,norm=mpl.colors.CenteredNorm(vcenter =1),shading = 'gouraud',cmap = 'RdBu_r')
     plt.colorbar()
     plt.show()

@@ -1,0 +1,76 @@
+<comment>
+problem   = 3D MRI test
+reference = J.F. Hawley, C.F. Gammie, & S.A. Balbus, ApJ 440, 742 (1995)
+configure = -b --prob=hgb --eos=isothermal
+
+<job>
+problem_id = HGB         # problem ID: basename of output filenames
+
+<output1>
+file_type  = hst         # History data dump
+dt         = 0.062831853 # time increment between outputs
+
+<output2>
+file_type  = hdf5        # Binary data dump
+variable   = prim       # variables to be output
+dt         = 6.2831853    # time increment between outputs, once an orbit
+
+<output3>
+file_type  = rst	#reset file in case we get cut off
+dt         = 6.2831853	#once an orbit
+
+
+<time>
+cfl_number = 0.3        # The Courant, Friedrichs, & Lewy (CFL) Number
+nlim       = -1         # cycle limit
+tlim       = 628.3185   # time limit (100 orbits)
+integrator  = vl2       # time integration algorithm
+xorder      = 2         # order of spatial reconstruction
+ncycle_out  = 100       # interval for stdout summary info
+
+
+<mesh>
+nx1        = 256         # Number of zones in X1-direction
+x1min      = -2       # minimum value of X1
+x1max      = 2        # maximum value of X1
+ix1_bc     = shear_periodic      # inner-X1 boundary flag
+ox1_bc     = shear_periodic      # outer-X1 boundary flag
+
+nx2        = 256        # Number of zones in X2-direction
+x2min      = -2      # minimum value of X2
+x2max      = 2       # maximum value of X2
+ix2_bc     = periodic  # inner-X2 boundary flag
+ox2_bc     = periodic  # outer-X2 boundary flag
+
+nx3        = 64        # Number of zones in X3-direction
+x3min      = -0.5      # minimum value of X3
+x3max      = 0.5       # maximum value of X3
+ix3_bc     = periodic  # inner-X3 boundary flag
+ox3_bc     = periodic  # outer-X3 boundary flag
+
+num_threads = 1        # maximum number of OMP threads
+
+<meshblock>
+nx1 = 32
+nx2 = 32
+nx3 = 32
+
+<hydro>
+gamma = 1.666666666666667 # gamma = C_p/C_v
+iso_sound_speed = 1.0     # isothermal sound speed
+
+<orbital_advection>
+OAorder   = 1       # 0: w/o OA, 1: w/ OA (1st), 2: w/ OA (2nd)
+qshear    = 1.5     # shear rate
+Omega0    = 1.0     # angular velocity of the system
+shboxcoord= 1	    # shearing box and OA combined necessitates
+
+<problem>
+d0        = 1.0       # background density
+amp       = 0.0001     # wave amplitude
+nwx       = -2        # wavenumber in x1
+nwy       = 1         # wavenumber in x2
+ipert     = 1         # random perturbations
+beta      = 400       # plasma beta
+ifield    = 2         # constant vertical flux Bz
+eta_ad    = 10         # Match elssaer number AM = .1
