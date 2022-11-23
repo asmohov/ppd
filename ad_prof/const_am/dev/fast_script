@@ -1,0 +1,17 @@
+
+
+#PBS -j oe
+#PBS -l select=4:ncpus=40:mpiprocs=40:model=sky_ele
+#PBS -l walltime=02:00:00
+#PBS -N 4x4_am_point1_nosts
+#PBS -q devel
+
+
+echo ----------------------------------------
+echo Job started on `date`
+echo ----------------------------------------
+
+mpiexec -n 128 /nobackup/amohov/ad_prof/dev/athena -i athinput.hgb      # run code
+
+# -end of script- 
+# -end of script-
