@@ -366,10 +366,10 @@ def az_avg_plotter(npz_name):
     
     
     #hard code for 4x4 box
-    radial_coords = athena_read.athdf('./ad_prof/const_am/hundred/HGB.out2.00002.athdf')['x1v']
+    #radial_coords = athena_read.athdf('./ad_prof/const_am/hundred/HGB.out2.00002.athdf')['x1v']
     
     #hard coded for 8x8 box
-    #radial_coords = athena_read.athdf('./ad_prof/const_am_big/1point0/HGB.out2.00044.athdf')['x1v']
+    radial_coords = athena_read.athdf('./ad_prof/amp_1/sig_15/HGB.out2.00044.athdf')['x1v']
 
     plt.pcolormesh(arr,radial_coords,data,norm=mpl.colors.CenteredNorm(vcenter =0),shading = 'gouraud',cmap = 'RdBu_r')
     plt.colorbar()

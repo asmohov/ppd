@@ -30,15 +30,15 @@ ncycle_out  = 100       # interval for stdout summary info
 
 
 <mesh>
-nx1        = 512         # Number of zones in X1-direction
-x1min      = -4       # minimum value of X1
-x1max      = 4        # maximum value of X1
+nx1        = 256         # Number of zones in X1-direction
+x1min      = -2       # minimum value of X1
+x1max      = 2        # maximum value of X1
 ix1_bc     = shear_periodic      # inner-X1 boundary flag
 ox1_bc     = shear_periodic      # outer-X1 boundary flag
 
-nx2        = 512        # Number of zones in X2-direction
-x2min      = -4      # minimum value of X2
-x2max      = 4       # maximum value of X2
+nx2        = 256        # Number of zones in X2-direction
+x2min      = -2      # minimum value of X2
+x2max      = 2       # maximum value of X2
 ix2_bc     = periodic  # inner-X2 boundary flag
 ox2_bc     = periodic  # outer-X2 boundary flag
 
@@ -67,10 +67,10 @@ shboxcoord= 1	    # shearing box and OA combined necessitates
 
 <problem>
 d0        = 1.0       # background density
-amp       = 0.0001     # wave amplitude
+amp       = 0.001     # wave amplitude
 nwx       = -2        # wavenumber in x1
 nwy       = 1         # wavenumber in x2
 ipert     = 1         # random perturbations
 beta      = 400       # plasma beta
 ifield    = 2         # constant vertical flux Bz
-eta_ad    = 0.1       # Match elssaer number AM = 10
+eta_ad    = 10         # Match elssaer number AM = .1

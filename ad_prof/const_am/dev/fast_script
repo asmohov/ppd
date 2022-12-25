@@ -2,8 +2,8 @@
 
 #PBS -j oe
 #PBS -l select=4:ncpus=40:mpiprocs=40:model=sky_ele
-#PBS -l walltime=02:00:00
-#PBS -N 4x4_am_point1_nosts
+#PBS -l walltime=2:00:00
+#PBS -N 4x4_am_point1_sts
 #PBS -q devel
 
 
