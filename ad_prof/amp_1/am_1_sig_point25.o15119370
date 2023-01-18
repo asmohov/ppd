@@ -1,4 +1,4 @@
-Job 15116942.pbspl1.nas.nasa.gov started on Sat Dec 24 04:04:39 PST 2022
+Job 15119370.pbspl1.nas.nasa.gov started on Sun Dec 25 00:38:33 PST 2022
 The job requested the following resources:
     ncpus=520
     place=scatter:excl
@@ -8,11 +8,11 @@ PBS set the following environment variables:
         FORT_BUFFERED = 1
                    TZ = PST8PDT
 
-On r145i7n14:
-Current directory is /nobackup/amohov/ad_prof/amp_15
-Current directory is /nobackup/amohov/ad_prof/amp_15
+On r139i5n0:
+Current directory is /nobackup/amohov/ad_prof/amp_1/sig_point25
+Current directory is /nobackup/amohov/ad_prof/amp_1/sig_point25
 ----------------------------------------
-Job started on Sat Dec 24 04:04:52 PST 2022
+Job started on Sun Dec 25 00:38:46 PST 2022
 ----------------------------------------
 MPT: libxmpi.so 'HPE MPT 2.25  08/14/21 03:21:52'
 MPT: libmpi_mt.so  'HPE MPT 2.25  08/14/21 03:20:21'
@@ -149,7 +149,7 @@ MPT: MPI_IB_TIMEOUT (default: 18) : 20
 MPT: MPI_IB_TM (default: disabled) : disabled
 MPT: MPI_IB_UPGRADE_SENDS (default: 0) : 0
 MPT: MPI_IB_XRC (default: enabled) : enabled
-MPT: MPI_MEMORY_REGION_LIMIT (default: 2510726297) : 2510726297
+MPT: MPI_MEMORY_REGION_LIMIT (default: 2510726041) : 2510726041
 MPT: MPI_NUM_MEMORY_REGIONS (default: 1024) : 1024
 MPT: MPI_OPA_DEVS (default: ) : 
 MPT: MPI_OPA_FINALIZE_TIMEOUT (default: 1) : 1
@@ -2143,15 +2143,15 @@ time=6.2831849999999997e+02 cycle=194977
 tlim=6.2831849999999997e+02 nlim=-1
 
 zone-cycles = 3271171244032
-cpu time used  = 4.6016269999999997e+04
-zone-cycles/cpu_second = 7.1087275088398084e+07
+cpu time used  = 4.4244050000000003e+04
+zone-cycles/cpu_second = 7.3934715380531386e+07
 
 ____________________________________________________________________
-Job Resource Usage Summary for 15116942.pbspl1.nas.nasa.gov
+Job Resource Usage Summary for 15119370.pbspl1.nas.nasa.gov
 
-    CPU Time Used            : 528:19:06
-    Real Memory Used         : 8283516kb
-    Walltime Used            : 13:16:44
+    CPU Time Used            : 499:38:40
+    Real Memory Used         : 8285164kb
+    Walltime Used            : 12:42:59
     Exit Status              : 0
 
     Number of CPUs Requested : 520
@@ -2160,5 +2160,5 @@ Job Resource Usage Summary for 15116942.pbspl1.nas.nasa.gov
     Execution Queue          : long
     Charged To               : s2563
 
-    Job Stopped              : Sat Dec 24 17:21:40 2022
+    Job Stopped              : Sun Dec 25 13:21:51 2022
 ____________________________________________________________________

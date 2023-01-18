@@ -3,7 +3,7 @@
 #PBS -j oe
 #PBS -l select=13:ncpus=40:mpiprocs=40:model=sky_ele
 #PBS -l walltime=72:00:00
-#PBS -N am_1_sig_15
+#PBS -N am_point5_inv_sig_5
 #PBS -q long
 
 
@@ -11,7 +11,7 @@ echo ----------------------------------------
 echo Job started on `date`
 echo ----------------------------------------
 
-mpiexec -n 512 /nobackup/amohov/ad_prof/amp_1/sig_15/athena -i athinput.hgb -t 71:45:00      # run code
+mpiexec -n 512 /nobackup/amohov/ad_prof/amp_point5/inv_sig_5/athena -i athinput.hgb -t 71:45:00      # run code
 
 # -end of script- 
 # -end of script-
