@@ -294,7 +294,7 @@ def az_avg_rho_vy(file_path,output_name,min_orbits = 20,max_orbits = 100):
     radial_dim = len(athena_read.athdf(file_path+'/HGB.out2.00002.athdf')['x1v'])
     print('orbits selected: ',arr)
     for i in arr:
-        #print(file_path+'/HGB.out2.000'+str(i)+'.athdf')
+        print(file_path+'/HGB.out2.000'+str(i)+'.athdf')
         if i<10:
             contour_list.append(az_avg(file_path+'/HGB.out2.0000'+str(i)+'.athdf','rho'))
         elif 9<i<100:
@@ -369,7 +369,7 @@ def az_avg_plotter(npz_name):
     #radial_coords = athena_read.athdf('./ad_prof/const_am/hundred/HGB.out2.00002.athdf')['x1v']
     
     #hard coded for 8x8 box
-    radial_coords = athena_read.athdf('./ad_prof/amp_1/sig_15/HGB.out2.00044.athdf')['x1v']
+    radial_coords = athena_read.athdf('./ad_prof/amp_1/sig_1/HGB.out2.00044.athdf')['x1v']
 
     plt.pcolormesh(arr,radial_coords,data,norm=mpl.colors.CenteredNorm(vcenter =0),shading = 'gouraud',cmap = 'RdBu_r')
     plt.colorbar()
