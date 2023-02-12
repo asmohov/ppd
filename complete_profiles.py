@@ -196,10 +196,16 @@ def oned_mag_profile(file_name):
     #assuming 64x256x256, but should work for any 
     overall_length = Nx*Ny*Nz
     #print(data['Bcc1'])
+    bx = data['Bcc1']
+    by = data['Bcc2']
+    bz = data['Bcc3']
+    bmag = np.sqrt(bx*bx+by*by+bz*bz)
+    bmag = np.sum(bmag,axis = (0,1))/(Nz*Ny)
+    
+    
     bx = np.sum(data['Bcc1'],axis=(0,1))/(Nz*Ny)
     by = np.sum(data['Bcc2'],axis=(0,1))/(Nz*Ny)
     bz = np.sum(data['Bcc3'],axis=(0,1))/(Nz*Ny)
-    bmag = np.sqrt(bx*bx+by*by+bz*bz)
     
     return bx,by,bz,bmag
 def avg_mag_prof(file_path):
@@ -235,3 +241,95 @@ def avg_mag_prof(file_path):
     prof_bmag = np.sum(prof_bmag,axis=0)/len(prof_bmag)
 
     return prof_bx,prof_by,prof_bz,prof_bmag
+
+#beta profile----------------------------------------------------------------------
+def oned_beta_profile(file_name):
+    #print('current file is :'+file_name)
+    data = []
+    data = athena_read.athdf(file_name)
+    #print(data)
+    #for 8x8x1 scale height box, with cubic cells, needs to be adjusted for other sizes
+    side_length = 1/len(data['x3v'])
+    #print(side_length,' side length')
+    volume = side_length**3
+    
+    Nx = len(data['x1v'])
+    Ny = len(data['x2v'])
+    Nz = len(data['x3v'])
+    
+    #assuming 64x256x256, but should work for any 
+    overall_length = Nx*Ny*Nz
+    #B magnitude
+    bx = data['Bcc1']
+    by = data['Bcc2']
+    bz = data['Bcc3']
+    bmagsquared = (bx*bx+by*by+bz*bz)
+    bmagsquared = np.sum(bmagsquared,axis = (0,1))/(Nz*Ny)
+    rho_prof = np.sum(data['rho'],axis=(0,1))/(Nz*Ny)
+    beta = 2*rho_prof/bmagsquared
+    return beta
+def avg_beta_prof(file_path):
+    prof_beta = []
+    #x_arr = np.linspace(-4,4,512)
+    for i in range(20):
+        #print('passing step ',i)
+        if i == 0:
+            fname = file_path+'/HGB.out2.00100.athdf'
+        else:
+            fname = file_path+'/HGB.out2.000'+str(100-i)+'.athdf'
+        beta_list=oned_beta_profile(fname)
+        prof_beta.append(beta_list)
+
+    #convert to numpy
+    prof_beta = np.array(prof_beta)
+    #stddeviation
+    prof_beta_sig = np.std(prof_beta,axis=0)
+    #average
+    prof_beta = np.sum(prof_beta,axis=0)/len(prof_beta)
+    return prof_beta,prof_beta_sig
+
+#betabar (see zhaohuan's other definition)--------------------------------------
+def oned_betabar_profile(file_name):
+    #print('current file is :'+file_name)
+    data = []
+    data = athena_read.athdf(file_name)
+    #print(data)
+    #for 8x8x1 scale height box, with cubic cells, needs to be adjusted for other sizes
+    side_length = 1/len(data['x3v'])
+    #print(side_length,' side length')
+    volume = side_length**3
+    
+    Nx = len(data['x1v'])
+    Ny = len(data['x2v'])
+    Nz = len(data['x3v'])
+    
+    #assuming 64x256x256, but should work for any 
+    overall_length = Nx*Ny*Nz
+    #B magnitude
+    bx = data['Bcc1']
+    by = data['Bcc2']
+    bz = data['Bcc3']
+    bmagsquared = (bx*bx+by*by+bz*bz)
+    betabar = 2*data['rho']/bmagsquared
+    betabar = np.sum(betabar,axis=(0,1))/(Nz*Ny)
+
+    return betabar
+def avg_betabar_prof(file_path):
+    prof_betabar= []
+    #x_arr = np.linspace(-4,4,512)
+    for i in range(20):
+        #print('passing step ',i)
+        if i == 0:
+            fname = file_path+'/HGB.out2.00100.athdf'
+        else:
+            fname = file_path+'/HGB.out2.000'+str(100-i)+'.athdf'
+        betabar_list=oned_betabar_profile(fname)
+        prof_betabar.append(betabar_list)
+
+    #convert to numpy
+    prof_betabar = np.array(prof_betabar)
+    #stddeviation
+    prof_betabar_sig = np.std(prof_betabar,axis=0)
+    #average
+    prof_betabar = np.sum(prof_betabar,axis=0)/len(prof_betabar)
+    return prof_betabar,prof_betabar_sig
