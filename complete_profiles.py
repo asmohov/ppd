@@ -293,11 +293,6 @@ def oned_betabar_profile(file_name):
     #print('current file is :'+file_name)
     data = []
     data = athena_read.athdf(file_name)
-    #print(data)
-    #for 8x8x1 scale height box, with cubic cells, needs to be adjusted for other sizes
-    side_length = 1/len(data['x3v'])
-    #print(side_length,' side length')
-    volume = side_length**3
     
     Nx = len(data['x1v'])
     Ny = len(data['x2v'])
@@ -311,8 +306,21 @@ def oned_betabar_profile(file_name):
     bz = data['Bcc3']
     bmagsquared = (bx*bx+by*by+bz*bz)
     betabar = 2*data['rho']/bmagsquared
+    #troubleshooting
+    #counter = 0
+    #for beta,bmag in zip(betabar,bmagsquared):
+    #    counter+=1
+    #    if beta.any()<10:
+    #        print('Low Beta encountered at counter: ',counter)
+    #        print('beta: ',(min(beta.flatten())),' bmagsquared: ',max(bmag.flatten()), 'rhoL ',min(data['rho'].flatten()))
     betabar = np.sum(betabar,axis=(0,1))/(Nz*Ny)
-
+    #troubleshooting
+    #counter = 0
+    #for beta,bmag in zip(betabar,bmagsquared):
+    #    counter+=1
+    #    if beta.any()<10:
+    #        print('Low Beta encountered at counter: ',counter)
+    #        print('beta: ',(min(beta.flatten())),' bmagsquared: ',max(bmag.flatten()), 'rhoL ',min(data['rho'].flatten()))
     return betabar
 def avg_betabar_prof(file_path):
     prof_betabar= []
