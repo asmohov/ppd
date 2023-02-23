@@ -174,10 +174,11 @@ def avg_rho_prof(file_path):
     prof_rho = np.array(prof_rho)
     #plt.plot(x_arr,prof_list[i],color = 'c')
     #stddeviation
-    prof_rho_sig = np.std(prof_rho,axis=0)
+    prof_rho_upper = np.percentile(prof_rho,75,axis=0)
+    prof_rho_lower = np.percentile(prof_rho,25,axis=0)
     #average
     prof_rho = np.sum(prof_rho,axis=0)/len(prof_rho)
-    return prof_rho,prof_rho_sig
+    return prof_rho,prof_rho_upper,prof_rho_lower
 #magnetic field-------------------------------------------------------
 def oned_mag_profile(file_name):
     #print('current file is :'+file_name)
@@ -283,10 +284,11 @@ def avg_beta_prof(file_path):
     #convert to numpy
     prof_beta = np.array(prof_beta)
     #stddeviation
-    prof_beta_sig = np.std(prof_beta,axis=0)
+    prof_beta_upper = np.percentile(prof_beta,75,axis=0)
+    prof_beta_lower = np.percentile(prof_beta,25,axis=0)
     #average
     prof_beta = np.sum(prof_beta,axis=0)/len(prof_beta)
-    return prof_beta,prof_beta_sig
+    return prof_beta,prof_beta_upper,prof_beta_lower
 
 #betabar (see zhaohuan's other definition)--------------------------------------
 def oned_betabar_profile(file_name):
@@ -337,7 +339,8 @@ def avg_betabar_prof(file_path):
     #convert to numpy
     prof_betabar = np.array(prof_betabar)
     #stddeviation
-    prof_betabar_sig = np.std(prof_betabar,axis=0)
+    prof_betabar_upper = np.percentile(prof_betabar,75,axis=0)
+    prof_betabar_lower = np.percentile(prof_betabar,25,axis=0)
     #average
     prof_betabar = np.sum(prof_betabar,axis=0)/len(prof_betabar)
-    return prof_betabar,prof_betabar_sig
+    return prof_betabar,prof_betabar_upper,prof_betabar_lower
