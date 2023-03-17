@@ -348,7 +348,12 @@ def az_avg_plotter(npz_name):
     fig.set_figwidth(10)
     ax.set_xlabel('orbit number')
     ax.set_ylabel('radial coordinate x')
-    title = 'Azimuthal Average Vy - Vshear for '+npz_name 
+    
+    
+    #SPECIFIC LABELS FOR THESIS IMAGE COMMENT OUT OTHERWISE
+    file_name1 = './thesis_images/vyvshear_am_1_sig_1_evolution.pdf'
+    title = '$V_y-V_{shear}$ time evolution for $Am_0=1, \\sigma=1$'
+    #title = 'Azimuthal Average Vy - Vshear for '+npz_name 
     fig.suptitle(title)
     #load dataset
     npzfile = np.load(npz_name)
@@ -359,9 +364,9 @@ def az_avg_plotter(npz_name):
     num_rows,num_col = np.shape(data)
 
     #for normal runs
-    #arr=range(20,20+num_col)
+    arr=range(20,20+num_col)
     #for devel runs
-    arr = range(0,num_col)
+    #arr = range(0,num_col)
     
     
     
@@ -372,7 +377,8 @@ def az_avg_plotter(npz_name):
     radial_coords = athena_read.athdf('./ad_prof/amp_1/sig_const/HGB.out2.00094.athdf')['x1v']
 
     plt.pcolormesh(arr,radial_coords,data,norm=mpl.colors.CenteredNorm(vcenter =0),shading = 'gouraud',cmap = 'RdBu_r')
-    plt.colorbar()
+    plt.colorbar(label='$v_y-v_{shear}$')
+    plt.savefig(file_name1)
     plt.show()
 
     #same but for rho
@@ -382,7 +388,9 @@ def az_avg_plotter(npz_name):
     fig.set_figwidth(10)
     ax.set_xlabel('orbit number')
     ax.set_ylabel('radial coordinate x')
-    title = 'Azimuthal Average Rho for '+npz_name 
+    #SPECIFIC LABELS FOR THESIS CHANGE OTHERWISE
+    file_name2 = './thesis_images/rho_am_1_sig_1_evolution.pdf'
+    title = 'Radial $\\rho$ Time Evolution for $Am_0=1, \\sigma=1$' 
     fig.suptitle(title)
     #load dataset
 
@@ -394,5 +402,6 @@ def az_avg_plotter(npz_name):
     #scaling statement, if desired
     #norm=mpl.colors.CenteredNorm(vcenter =1),
     plt.pcolormesh(arr,radial_coords,data,norm=mpl.colors.CenteredNorm(vcenter =1),shading = 'gouraud',cmap = 'RdBu_r')
-    plt.colorbar()
+    plt.colorbar(label='$\\rho/\\rho_0$')
+    plt.savefig(file_name2)
     plt.show()
