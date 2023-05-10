@@ -1,0 +1,38 @@
+Job 15956898.pbspl1.nas.nasa.gov started on Sat May 06 06:41:29 PDT 2023
+The job requested the following resources:
+    ncpus=520
+    place=scatter:excl
+    walltime=72:00:00
+
+PBS set the following environment variables:
+        FORT_BUFFERED = 1
+                   TZ = PST8PDT
+
+On r145i7n31:
+Current directory is /nobackup/amohov/ad_prof/amp_50
+Current directory is /nobackup/amohov/ad_prof/amp_50
+----------------------------------------
+Job started on Sat May 6 06:41:39 PDT 2023
+----------------------------------------
+MPT: libxmpi.so 'HPE MPT 2.25  08/14/21 03:21:52'
+/nobackup/amohov/ad_prof/amp_50/sig_const/athena: No such file or directory
+MPT ERROR: could not run executable.
+	(HPE MPT 2.25  08/14/21 03:21:52)
+/var/spool/pbs/mom_priv/jobs/15956898.pbspl1.nas.nasa.gov.SC: line 21: 39896 Killed                  mpiexec -n 512 /nobackup/amohov/ad_prof/amp_50/sig_const/athena -i athinput.hgb -t 71:45:00
+
+____________________________________________________________________
+Job Resource Usage Summary for 15956898.pbspl1.nas.nasa.gov
+
+    CPU Time Used            : 00:00:02
+    Real Memory Used         : 716kb
+    Walltime Used            : 00:00:01
+    Exit Status              : 137
+
+    Number of CPUs Requested : 520
+    Walltime Requested       : 72:00:00
+
+    Execution Queue          : long
+    Charged To               : s2563
+
+    Job Stopped              : Sat May  6 06:41:46 2023
+____________________________________________________________________
